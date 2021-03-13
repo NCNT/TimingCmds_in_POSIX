@@ -50,4 +50,4 @@ Enjoy!
 
 Tomoyuki Matsuura as Colonel Richie, belongs to USP-NCNT project and ShellShoccar Japan.
 
-Everyting in this repository is completely free for everyone. If you want any license to use them by all means, we give you CC0 or the Unlicense. Anyway, take them freely as you like.
+Everyting in this repository is completely free for everyone. If you want any license to use them by all means, we'll give you CC0 or the Unlicense. Anyway, take them freely as you like.
