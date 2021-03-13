@@ -43,7 +43,7 @@ $ git clone https://github.com/NCNT/TimingCmds_in_POSIX.git
 $ c_src/MAKE.sh -d ../bin
 ```
 
-And you can get the command in the `bin` directory. Copy or move them to one of directories which is listed in the `$PATH` variable.
+And you can get the commands in the `bin` directory. Copy or move them to one of directories which is listed in the `$PATH` variable.
 Enjoy!
 
 ## Author / License
