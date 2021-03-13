@@ -2,7 +2,7 @@
 
 ## What is this?
 
-This is a command set to make your UNIX life more convenient! On the current POSIX commands, are you satisfied with them for timing management? Unfortunately, we aren't. That is because POSIX doesn't release the commands for controling time accurately and/or precisely. For instance, image a scene you have to send text data at one second interval accurately. How can you do that? You can do only like that.
+This is a command set to make your UNIX life more convenient! On the current POSIX commands, are you satisfied for timing management? Unfortunately, we aren't. That is because POSIX doesn't release the commands for controling time accurately and/or precisely. For instance, image a scene you have to send text data at one second interval accurately. How can you do that? You can do only like that.
 
 ```sh:
 cat /PATH/TO/textdata_source |
