@@ -23,12 +23,12 @@ $ cat /PATH/TO/textdata_source | valve -l 1s
 Several more commands are available.
 
 * [`calclock`](bin/calclock) ... Convert bewteen the Calendar time and UNIX time
-* [`getftimes`](c_src/getftimes) .. Display timestamps (mtime, ctime, atime) of a file
-* [`linets`](c_src/linets) ..... Add timestamp to every line of text data
-* [`ptw`](c_src/ptw) ........ A command wrapper to prevent a command from do full-buffering
-* [`sleep`](c_src/sleep) ...... Sleep command which supports sleeping during less than a second
-* [`tscat`](c_src/tscat) ...... Output each line at the data and time which is written in the top of the line
-* [`valve`](c_src/valve) ...... Output each byte/line at the specified interval
+* [`getftimes`](c_src/getftimes.c) .. Display timestamps (mtime, ctime, atime) of a file
+* [`linets`](c_src/linets.c) ..... Add timestamp to every line of text data
+* [`ptw`](c_src/ptw.c) ........ A command wrapper to prevent a command from do full-buffering
+* [`sleep`](c_src/sleep.c) ...... Sleep command which supports sleeping during less than a second
+* [`tscat`](c_src/tscat.c) ...... Output each line at the data and time which is written in the top of the line
+* [`valve`](c_src/valve.c) ...... Output each byte/line at the specified interval
 
 To get the information for the commands, build the command and run them with the option `--help`.
 
