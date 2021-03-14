@@ -25,7 +25,7 @@ Several more commands are available.
 * [`calclock`](bin/calclock) ... Convert bewteen the Calendar time and UNIX time
 * [`getftimes`](c_src/getftimes.c) .. Display timestamps (mtime, ctime, atime) of a file
 * [`linets`](c_src/linets.c) ..... Add timestamp to every line of text data (See a [tutorial](https://growi.ncnt.work/NCNT/info/linets_and_tscat.en) for details)
-* [`ptw`](c_src/ptw.c) ........ A command wrapper to prevent a command from do full-buffering (alternative of [stdbuf](https://www.gnu.org/software/coreutils/manual/html_node/stdbuf-invocation.html#stdbuf-invocation), see [this](https://growi.ncnt.work/NCNT/info/ptw.en) for details)
+* [`ptw`](c_src/ptw.c) ........ A command wrapper to prevent a command from full-buffering (alternative of [stdbuf](https://www.gnu.org/software/coreutils/manual/html_node/stdbuf-invocation.html#stdbuf-invocation), see [this](https://growi.ncnt.work/NCNT/info/ptw.en) for details)
 * [`sleep`](c_src/sleep.c) ...... Sleep command which supports sleeping during less than a second
 * [`tscat`](c_src/tscat.c) ...... Output each line at the data and time which is written in the top of the line (See a [tutorial](https://growi.ncnt.work/NCNT/info/linets_and_tscat.en) for details)
 * [`valve`](c_src/valve.c) ...... Output each byte/line at the specified interval
