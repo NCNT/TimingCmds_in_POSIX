@@ -20,7 +20,7 @@
 #
 # Designed originally by Nobuaki Tounaka
 # Written by USP-NCNT prj. / Shell-Shoccar Japan (@shellshoccarjpn)
-#         on 2021-03-13
+#         on 2021-03-14
 #
 # This is a public-domain software (CC0). It means that all of the
 # people can use this for any purposes with no restrictions at all.
@@ -57,7 +57,7 @@ print_usage_and_exit () {
 	                    converting
 	          -r ...... Converts from UNIX time to YYYYMMDDhhmmss instead of
 	                    from YYYYMMDDhhmmss to YYYYMMDDhhmmss
-	Version : 2021-03-13 19:49:36 JST
+	Version : 2021-03-14 12:06:02 JST
 	          Open usp Tukubai (POSIX Bourne Shell/POSIX commands)
 	USAGE
   exit 1
@@ -394,7 +394,6 @@ function YYYYMMDDhhmmss2unixtime(YYYYMMDDhhmmss, dp,Y,M,D,h,m,s,l) {
   if (l==0) {dp="";
   } else    {dp=substr(YYYYMMDDhhmmss,l);
              YYYYMMDDhhmmss=substr(YYYYMMDDhhmmss,1,l-1);}
-printf("ut=%s dp=%s\n",ut,dp) > "/dev/stderr";
   l = length(YYYYMMDDhhmmss);
   if        (l <  5) { # invalid
     return -1;
