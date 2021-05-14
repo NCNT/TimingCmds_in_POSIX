@@ -40,7 +40,7 @@ To short, all you have to do is to type the following commands.
 
 ```sh:
 $ git clone https://github.com/NCNT/TimingCmds_in_POSIX.git
-$ c_src/MAKE.sh -d ../bin
+$ TimingCmds_in_POSIX/c_src/MAKE.sh -d ../bin
 ```
 
 And you can get the commands in the `bin` directory. Copy or move them to one of directories which is listed in the `$PATH` variable.
