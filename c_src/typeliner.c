@@ -71,7 +71,7 @@ void print_usage_and_exit(void) {
     "          -t str ... Replace the terminator after a bunch with <str>.\n"
     "                     Default is \"\n.\"\n"
     "Retuen  : 0 only when finished successfully\n"
-    "Version : 2022-07-03 18:27:18 JST\n"
+    "Version : 2022-07-03 20:10:30 JST\n"
     "          (POSIX C language with \"POSIX centric\" programming)\n"
     "\n"
     "USP-NCNT prj. / Shell-Shoccar Japan (@shellshoccarjpn),\n"
@@ -142,8 +142,8 @@ while ((i=getopt(argc, argv, "1dn:t:v")) != -1) {
                                                  break;
     case 't': i = strlen(optarg);
               if (i>=TRMSIZE) {
-                error_exit(1,"<str> of the -t option must be within %d.",
-                           TRMSIZE-1                                     );
+                error_exit(1,"<str> of the -t option must be within %d.\n",
+                           TRMSIZE-1                                       );
               }
               strcpy(szTrm,optarg); iSize_trm=i; break;
     case 'v': giVerbose++;                       break;
