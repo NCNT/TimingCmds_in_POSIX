@@ -29,19 +29,28 @@ Several more commands are available.
 * [`ptw`](c_src/ptw.c) ........... A command wrapper to prevent a command from full-buffering (alternative of [stdbuf](https://www.gnu.org/software/coreutils/manual/html_node/stdbuf-invocation.html#stdbuf-invocation), see [this](https://growi.ncnt.work/NCNT/info/ptw.en) for details)
 * [`sleep`](c_src/sleep.c) ....... Sleep command which supports sleeping during less than a second
 * [`tscat`](c_src/tscat.c) ....... Output each line at the data and time which is written in the top of the line (See a [tutorial](https://growi.ncnt.work/NCNT/info/linets_and_tscat.en) for details)
+* [`typeliner`](c_src/typeliner.c) Make a Line of a Bunch of Key Types
 * [`valve`](c_src/valve.c) ....... Output each byte/line at the specified interval
 
 To get the information for the commands, build the command and run them with the option `--help`.
 
 ## How to Build
 
-First, `git clone` this repository. Then, run the `MAKE.sh` command to build the command with the source files.
+First, `git clone` this repository. Then, run the `INSTALLIN.sh` with specifying the install directory. Building and installation progress interactively.
 
-To short, all you have to do is to type the following commands.
+To short, all you have to do is to type the following commands. ("/usr/local/TimingCmds_in_POSIX" is a typical directory for installation)
 
 ```sh:
 $ git clone https://github.com/NCNT/TimingCmds_in_POSIX.git
-$ TimingCmds_in_POSIX/c_src/MAKE.sh -d ../bin
+$ su
+# TimingCmds_in_POSIX/INSTALLIN.sh /usr/local/TimingCmds_in_POSIX
+```
+
+Or type the following if you want to install this in your home directoy instead.
+
+```sh:
+$ git clone https://github.com/NCNT/TimingCmds_in_POSIX.git
+$ TimingCmds_in_POSIX/INSTALLIN.sh $HOME/TimingCmds_in_POSIX
 ```
 
 And you can get the commands in the `bin` directory. Copy or move them to one of directories which is listed in the `$PATH` variable.

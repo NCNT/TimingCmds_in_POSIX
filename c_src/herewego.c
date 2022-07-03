@@ -71,7 +71,7 @@
 #                       These are all same meanings.
 # Options : -0,-3,-6,-9 Specify resolution unit of the timestamp. For
 #                       instance, timestamp becomes "YYYYMMDDhhmmss.nnn"
-#                       when "-3" option is set.
+#                       when "-3" option is set. 
 #                       You have to set one of them.
 #                         -0 ... second (default)
 #                         -3 ... millisecond
@@ -275,7 +275,7 @@ void print_usage_and_exit(void) {
     "                        -e ... \"n[.n]\"\n"
     "                               The number of seconds since the UNIX\n"
     "                               epoch (\".n\" is the same as -c)\n"
-    "                        -I ... \"YYYY-MM-DDThh:mm:ss[,n]{+|-}hh:mm\"\n"
+  	"                        -I ... \"YYYY-MM-DDThh:mm:ss[,n]{+|-}hh:mm\"\n"
     "                               The ISO 8601 format\n"
     "                               (\",n\" is the same as -c)\n"
     "          -u ........ Set the timestamp displayed just before exiting\n"
@@ -293,7 +293,7 @@ void print_usage_and_exit(void) {
 #endif
     "Retuen  : Return 0 only when finished successfully\n"
     "\n"
-    "Version : 2022-03-13 23:13:07 JST\n"
+    "Version : 2021-03-13 23:13:07 JST\n"
     "          (POSIX C language)\n"
     "\n"
     "USP-NCNT prj. / Shell-Shoccar Japan (@shellshoccarjpn),\n"
@@ -368,8 +368,8 @@ while ((i=getopt(argc, argv, "0369ceIp:uvh")) != -1) {
     case '3': giTimeResol =  3 ;                 break;
     case '6': giTimeResol =  6 ;                 break;
     case '9': giTimeResol =  9 ;                 break;
-    case 'c':
-    case 'e':
+    case 'c': 
+    case 'e': 
     case 'I': giFmtType   =  i ;                 break;
     #if defined(_POSIX_PRIORITY_SCHEDULING) && !defined(__OpenBSD__) && !defined(__APPLE__)
       case 'p': if (sscanf(optarg,"%d",&giPrio) != 1) {print_usage_and_exit();}
@@ -582,7 +582,7 @@ int change_to_rtprocess(int iPrio) {
              } else                                           {
                if (giVerbose>0) {warning("\"-p3\": %s\n",strerror(errno));}
              }
-    case 2 :
+    case 2 : 
       #ifdef RLIMIT_RTPRIO
              if ((getrlimit(RLIMIT_RTPRIO,&rlInfo))==-1) {
                return errno;
