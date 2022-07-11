@@ -19,7 +19,7 @@
 # How to compile : cc -O3 -o __CMDNAME__ __SRCNAME__
 #
 # Written by USP-NCNT prj. / Shell-Shoccar Japan (@shellshoccarjpn)
-#         on 2022-07-11
+#         on 2022-07-12
 #
 # This is a public-domain software (CC0). It means that all of the
 # people can use this for any purposes with no restrictions at all.
@@ -43,6 +43,7 @@
 #define TRMSIZE  128
 /*--- headers ------------------------------------------------------*/
 #include <errno.h>
+#include <signal.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -50,10 +51,11 @@
 #include <termios.h>
 #include <unistd.h>
 /*--- global variables ---------------------------------------------*/
-char*          gpszCmdname;        /* The name of this command      */
-struct termios gstTerms1st = {0};
-char           gszBuf[BLKSIZE+1];
-int            giVerbose;         /* greater number, more verbosely */
+char*            gpszCmdname;       /* The name of this command       */
+struct termios   gstTerms1st = {0};
+char             gszBuf[BLKSIZE+1];
+struct sigaction gsaExit;           /* To resume terminal conf before exit */
+int              giVerbose;         /* greater number, more verbosely */
 
 /*=== Define the functions for printing usage and error ============*/
 /*--- exit with usage ----------------------------------------------*/
@@ -72,7 +74,7 @@ void print_usage_and_exit(void) {
     "          -t str ... Replace the terminator after a bunch with <str>.\n"
     "                     Default is \"\n.\"\n"
     "Retuen  : 0 only when finished successfully\n"
-    "Version : 2022-07-11 01:37:02 JST\n"
+    "Version : 2022-07-12 00:29:42 JST\n"
     "          (POSIX C language with \"POSIX centric\" programming)\n"
     "\n"
     "USP-NCNT prj. / Shell-Shoccar Japan (@shellshoccarjpn),\n"
@@ -107,6 +109,11 @@ void exit_trap(void) {
     error_exit(errno,"tcsetattr()#%d: %s\n", __LINE__, strerror(errno));
   }
   if (giVerbose>1) {warning("The terminal attributes recovered.\n");}
+}
+/*--- exit trap (interrupted) --------------------------------------*/
+void interrupted_trap(int iSig, siginfo_t *siInfo, void *pct) {
+  exit_trap();
+  exit(128+iSig);
 }
 
 
@@ -184,6 +191,25 @@ if (tcgetattr(STDIN_FILENO, &gstTerms1st) < 0) {
 if (atexit(exit_trap)!=0) {
   error_exit(255,"atexit()#%d: Cannot register\n", __LINE__);
 }
+memset(&gsaExit, 0, sizeof(gsaExit));
+gsaExit.sa_sigaction = interrupted_trap;
+gsaExit.sa_flags     = SA_SIGINFO;
+sigemptyset(&gsaExit.sa_mask);
+sigaddset(&gsaExit.sa_mask, SIGHUP ); sigaddset(&gsaExit.sa_mask, SIGINT );
+sigaddset(&gsaExit.sa_mask, SIGQUIT); sigaddset(&gsaExit.sa_mask, SIGPIPE);
+sigaddset(&gsaExit.sa_mask, SIGALRM); sigaddset(&gsaExit.sa_mask, SIGTERM);
+if (sigaction(SIGHUP ,&gsaExit,NULL) != 0)
+  error_exit(errno,"sigaction()#%d: %s\n", __LINE__, strerror(errno));
+if (sigaction(SIGINT ,&gsaExit,NULL) != 0)
+  error_exit(errno,"sigaction()#%d: %s\n", __LINE__, strerror(errno));
+if (sigaction(SIGQUIT,&gsaExit,NULL) != 0)
+  error_exit(errno,"sigaction()#%d: %s\n", __LINE__, strerror(errno));
+if (sigaction(SIGPIPE,&gsaExit,NULL) != 0)
+  error_exit(errno,"sigaction()#%d: %s\n", __LINE__, strerror(errno));
+if (sigaction(SIGALRM,&gsaExit,NULL) != 0)
+  error_exit(errno,"sigaction()#%d: %s\n", __LINE__, strerror(errno));
+if (sigaction(SIGTERM,&gsaExit,NULL) != 0)
+  error_exit(errno,"sigaction()#%d: %s\n", __LINE__, strerror(errno));
 memcpy(&stTerms, &gstTerms1st, sizeof(struct termios));
 stTerms.c_lflag &= ~ICANON;
 if (iEchomode==0) {stTerms.c_lflag &= ~ECHO;}
@@ -205,8 +231,7 @@ while ((iSize_r=(int)read(STDIN_FILENO,gszBuf,BLKSIZE+1))>0) {
     iOffset+=iSize_w;
   }
   /*--- Insert the LF if the non-full and non-LF-terminated --------*/
-  if ( (iSize_r==1                     && gszBuf[        0]!='\n') ||
-       (iSize_r> 0 && iSize_r<=BLKSIZE && gszBuf[iSize_r-1]!='\n')   ) {
+  if (!( iSize_r==0 || (iSize_r==1 && gszBuf[0]=='\n') || iSize_r>BLKSIZE)) {
     iRemain=iSize_trm;
     for (iOffset=0; iRemain>0; iRemain-=iSize_w) {
       if ((iSize_w=(int)write(STDOUT_FILENO,szTrm+iOffset,iRemain))<0) {
