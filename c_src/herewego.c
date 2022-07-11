@@ -109,7 +109,7 @@
 # How to compile : cc -O3 -o __CMDNAME__ __SRCNAME__
 #
 # Written by USP-NCNT prj. / Shell-Shoccar Japan (@shellshoccarjpn)
-#         on 2022-03-13
+#         on 2022-07-11
 #
 # This is a public-domain software (CC0). It means that all of the
 # people can use this for any purposes with no restrictions at all.
@@ -275,7 +275,7 @@ void print_usage_and_exit(void) {
     "                        -e ... \"n[.n]\"\n"
     "                               The number of seconds since the UNIX\n"
     "                               epoch (\".n\" is the same as -c)\n"
-  	"                        -I ... \"YYYY-MM-DDThh:mm:ss[,n]{+|-}hh:mm\"\n"
+    "                        -I ... \"YYYY-MM-DDThh:mm:ss[,n]{+|-}hh:mm\"\n"
     "                               The ISO 8601 format\n"
     "                               (\",n\" is the same as -c)\n"
     "          -u ........ Set the timestamp displayed just before exiting\n"
@@ -293,7 +293,7 @@ void print_usage_and_exit(void) {
 #endif
     "Retuen  : Return 0 only when finished successfully\n"
     "\n"
-    "Version : 2021-03-13 23:13:07 JST\n"
+    "Version : 2022-07-11 15:51:59 JST\n"
     "          (POSIX C language)\n"
     "\n"
     "USP-NCNT prj. / Shell-Shoccar Japan (@shellshoccarjpn),\n"
@@ -478,7 +478,7 @@ switch (giTimeResol) {
 }
 
 /*--- Concatenate all of the three parts ---------------------------*/
-sprintf(szTs, "%s%s%s", szTs1, szTs2, szTs3);
+snprintf(szTs, sizeof(szTs), "%s%s%s", szTs1, szTs2, szTs3);
 
 /*=== Sleep until the time to exit =================================*/
 switch (clock_nanosleep(CLOCK_REALTIME,TIMER_ABSTIME,&tsT0,NULL)) {
