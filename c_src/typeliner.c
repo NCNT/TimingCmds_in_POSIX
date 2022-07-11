@@ -74,7 +74,7 @@ void print_usage_and_exit(void) {
     "          -t str ... Replace the terminator after a bunch with <str>.\n"
     "                     Default is \"\n.\"\n"
     "Retuen  : 0 only when finished successfully\n"
-    "Version : 2022-07-12 00:29:42 JST\n"
+    "Version : 2022-07-12 01:35:48 JST\n"
     "          (POSIX C language with \"POSIX centric\" programming)\n"
     "\n"
     "USP-NCNT prj. / Shell-Shoccar Japan (@shellshoccarjpn),\n"
@@ -112,8 +112,8 @@ void exit_trap(void) {
 }
 /*--- exit trap (interrupted) --------------------------------------*/
 void interrupted_trap(int iSig, siginfo_t *siInfo, void *pct) {
-  exit_trap();
-  exit(128+iSig);
+  if (giVerbose>1) {warning("Interrupted by signal %d\n", iSig);}
+  exit(128+iSig); /* This func calls exit_trap() before exit */
 }
 
 
