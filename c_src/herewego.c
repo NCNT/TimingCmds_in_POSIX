@@ -293,7 +293,7 @@ void print_usage_and_exit(void) {
 #endif
     "Retuen  : Return 0 only when finished successfully\n"
     "\n"
-    "Version : 2022-07-11 16:02:48 JST\n"
+    "Version : 2022-07-11 16:12:50 JST\n"
     "          (POSIX C language)\n"
     "\n"
     "USP-NCNT prj. / Shell-Shoccar Japan (@shellshoccarjpn),\n"
@@ -478,7 +478,8 @@ switch (giTimeResol) {
 }
 
 /*--- Concatenate all of the three parts ---------------------------*/
-snprintf(szTs, sizeof(szTs)-1, "%s%s%s", szTs1, szTs2, szTs3);
+snprintf(szTs, sizeof(szTs), "%s%s%s", szTs1, szTs2, szTs3);
+szTs[sizeof(szTs)-1]='\0';
 
 /*=== Sleep until the time to exit =================================*/
 switch (clock_nanosleep(CLOCK_REALTIME,TIMER_ABSTIME,&tsT0,NULL)) {
