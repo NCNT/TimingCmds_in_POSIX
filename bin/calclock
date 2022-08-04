@@ -4,23 +4,25 @@
 #
 # CALCLOCK - Time Format Converter Between YYYYMMDDhhmmss and UNIX time
 #
-# USAGE: calclock [+<n>h] [-r] <f1> <f2> ... <file>
-#        calclock -d[r] <string>
-#
-#        <fn> .... Time field number you want to convert
-#        <file> .. Text file which contains some time field to convert
-#        <string>  It will be explained in -d option
-#        -d ...... Direct Mode :
-#                  It make this command regard the last argument (<string>)
-#                  as a field formatted string instead of <file>
-#        +<n>h ... Regards the top <n> lines as comment and Print without
-#                  converting
-#        -r ...... Converts from UNIX time to YYYYMMDDhhmmss instead of
-#                  from YYYYMMDDhhmmss to YYYYMMDDhhmmss
+# Usage   : calclock [+<n>h] [-r] <f1> <f2> ... <file>
+#           calclock -d[r] <string>
+# Args    : <fn> .... Time field number you want to convert
+#           <file> .. Text file which contains some time field to convert
+#           <string>  It will be explained in -d option
+# Options : -d ...... Direct Mode :
+#                     It make this command regard the last argument (<string>)
+#                     as a field formatted string instead of <file>
+#           +<n>h ... Regards the top <n> lines as comment and Print without
+#                     converting
+#           -r ...... Converts from UNIX time to YYYYMMDDhhmmss instead of
+#                     from YYYYMMDDhhmmss to YYYYMMDDhhmmss
+# Environs: LINE_BUFFERED
+#             =yes ........ Line-buffered mode if possible
+#             =forcible ... Line-buffered mode or exit if impossible
 #
 # Designed originally by Nobuaki Tounaka
 # Written by USP-NCNT prj. / Shell-Shoccar Japan (@shellshoccarjpn)
-#         on 2021-03-14
+#         on 2022-07-18
 #
 # This is a public-domain software (CC0). It means that all of the
 # people can use this for any purposes with no restrictions at all.
@@ -40,10 +42,13 @@ umask 0022
 export LC_ALL=C
 export PATH="$(command -p getconf PATH 2>/dev/null)${PATH+:}${PATH-}"
 case $PATH in :*) PATH=${PATH#?};; esac
-export UNIX_STD=2003  # to make HP-UX conform to POSIX
+export POSIXLY_CORRECT=1 # to make GNU Coreutils conform to POSIX
+export UNIX_STD=2003     # to make HP-UX conform to POSIX
+IFS=' 	
+'
 
 # === Define the functions for printing usage and error message ======
-print_usage_and_exit () {
+print_usage_and_exit() {
   cat <<-USAGE 1>&2
 	Usage   : ${0##*/} [+<n>h] [-r] <f1> <f2> ... <file>
 	          ${0##*/} -d[r] <string>
@@ -57,7 +62,10 @@ print_usage_and_exit () {
 	                    converting
 	          -r ...... Converts from UNIX time to YYYYMMDDhhmmss instead of
 	                    from YYYYMMDDhhmmss to YYYYMMDDhhmmss
-	Version : 2021-03-14 12:06:02 JST
+	Environs: LINE_BUFFERED
+	            =yes ........ Line-buffered mode if possible
+	            =forcible ... Line-buffered mode or exit if impossible
+	Version : 2022-07-18 01:13:48 JST
 	          Open usp Tukubai (POSIX Bourne Shell/POSIX commands)
 	USAGE
   exit 1
@@ -119,6 +127,7 @@ for arg in "$@"; do
   opt_part=0
   if [ $i -eq $# ] && [ $directmode -ne 0 ]; then
     directstr=$arg
+    fldnums=1
     break
   fi
   # separate arg to arg1, arg2
@@ -159,6 +168,9 @@ done
 case "$fldnums" in '') print_usage_and_exit;; esac
 if [ $directmode -ne 0 ]; then
   case "$directstr" in '') print_usage_and_exit;; esac
+  printf '%s\n' "$directstr" | grep -Eq '^[0-9]+(\.[0-9]+)?$' || {
+    error_exit 1 "$directstr"': Invalid date and time'
+  }
   file=''
 elif [ "_$file" = '_'                ] ||
      [ "_$file" = '_-'               ] ||
@@ -174,6 +186,21 @@ else
   print_usage_and_exit
 fi
 case "$file" in ''|-|/*|./*|../*) :;; *) file="./$file";; esac
+
+# === Switch to the line-buffered mode if required ===================
+awkfl=''
+case "${LINE_BUFFERED:-}" in
+             [Ff][Oo][Rr][Cc][EeIi]*|2) lbm=2;;
+  [Tt][Rr][Uu][Ee]|[Yy][Ee][Ss]|[Yy]|1) lbm=1;;
+                                     *) lbm=0;;
+esac
+case $lbm in [!0]*)
+  s=$(awk -W interactive 'BEGIN{}' 2>&1)
+  case "$?$s" in
+  '0') alias awk='awk -W interactive';;
+    *) awkfl='system("");'           ;;
+  esac
+;; esac
 
 
 ######################################################################
@@ -298,18 +325,18 @@ if [ $all_fields -eq 0 ]; then
                   }
                 }
               }
-              printf("convert_marked_flds();print;");
+              printf("convert_marked_flds();print;'"$awkfl"'");
             }
           '                                         )
   echo "$awkc0" | grep -q 'NF'
   if [ $? -ne 0 ]; then
     awkc0b=${awkc0%convert_marked_flds*}
-    awkc0='convert_marked_flds();print;'
+    awkc0='convert_marked_flds();print;'"$awkfl"
   else
     awkc0b=''
   fi
 else
-  awkc0='split("",mark);for(i=1;i<=NF;i++){mark[i]=1}convert_marked_flds();print;'
+  awkc0='split("",mark);for(i=1;i<=NF;i++){mark[i]=1}convert_marked_flds();print;'"$awkfl"
   awkc0b=''
 fi
 
@@ -319,7 +346,7 @@ BEGIN {
   YYYYMMDDhhmmss2unixtime_prep("LOCALTIME"); # initialize with localtime mode
   for (i=0; i<hdr_skip; i++) {
     if (getline line) {
-      print line;
+      print line;'"$awkfl"'
     } else {
       exit;
     }

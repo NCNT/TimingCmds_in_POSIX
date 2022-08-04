@@ -47,7 +47,7 @@
 # How to compile : cc -O3 -o __CMDNAME__ __SRCNAME__
 #
 # Written by USP-NCNT prj. / Shell-Shoccar Japan (@shellshoccarjpn)
-# 　　　　 on 2022-07-18
+#         on 2022-07-18
 #
 # This is a public-domain software (CC0). It means that all of the
 # people can use this for any purposes with no restrictions at all.
